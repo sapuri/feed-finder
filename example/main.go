@@ -1,18 +1,3 @@
-# feed-finder
-A Go library for finding RSS feed URLs from the given URL
-
-## Installation
-```
-go get github.com/sapuri/feed-finder
-```
-
-(optional) To run unit tests:
-```
-make test
-```
-
-## Examples
-```go
 package main
 
 import (
@@ -35,4 +20,3 @@ func main() {
 
 	fmt.Println(feedURLs)
 }
-```
