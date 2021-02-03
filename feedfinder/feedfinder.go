@@ -14,13 +14,13 @@ type Feed struct {
 	URL   *url.URL
 }
 
-type FeedFinder struct{}
+type feedFinder struct{}
 
-func NewFeedFinder() *FeedFinder {
-	return &FeedFinder{}
+func newfeedFinder() *feedFinder {
+	return &feedFinder{}
 }
 
-func (ff *FeedFinder) FindFeeds(ctx context.Context, siteURL string) ([]*Feed, error) {
+func (ff *feedFinder) FindFeeds(ctx context.Context, siteURL string) ([]*Feed, error) {
 	// TODO: allow the HTTP option to be specified
 	client := http.DefaultClient
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, siteURL, nil)
