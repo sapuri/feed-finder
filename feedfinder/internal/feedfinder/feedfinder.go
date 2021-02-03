@@ -60,6 +60,8 @@ func (ff *FeedFinder) FindFeeds(ctx context.Context, siteURL string) ([]*Feed, e
 		if title, exists := s.Attr("title"); exists {
 			feed.Title = title
 		}
+
+		feeds[i] = &feed
 	})
 
 	// TODO: Add more find logic
