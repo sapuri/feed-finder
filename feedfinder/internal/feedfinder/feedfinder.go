@@ -3,10 +3,16 @@ package feedfinder
 import (
 	"context"
 	"net/http"
+	"net/url"
 
 	"github.com/PuerkitoBio/goquery"
 	"github.com/sapuri/feed-finder/feedfinder/errors"
 )
+
+type Feed struct {
+	Title string
+	URL   *url.URL
+}
 
 type FeedFinder struct{}
 
@@ -14,18 +20,18 @@ func NewFeedFinder() *FeedFinder {
 	return &FeedFinder{}
 }
 
-func (ff *FeedFinder) FindFeeds(ctx context.Context, siteURL string) (feedURLs []string, err error) {
+func (ff *FeedFinder) FindFeeds(ctx context.Context, siteURL string) ([]*Feed, error) {
 	// TODO: allow the HTTP option to be specified
 	client := http.DefaultClient
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, siteURL, nil)
 	if err != nil {
-		return
+		return nil, err
 	}
 	req.Header.Set("User-Agent", "Mozilla/5.0")
 
 	res, err := client.Do(req)
 	if err != nil {
-		return
+		return nil, err
 	}
 	defer func() {
 		_ = res.Body.Close()
@@ -33,22 +39,30 @@ func (ff *FeedFinder) FindFeeds(ctx context.Context, siteURL string) (feedURLs [
 
 	if res.StatusCode != http.StatusOK {
 		err = errors.NewHTTPError(res.StatusCode)
-		return
+		return nil, err
 	}
 
 	doc, err := goquery.NewDocumentFromReader(res.Body)
 	if err != nil {
-		return
+		return nil, err
 	}
 	links := doc.Find(`link[type="application/rss+xml"]`)
+	feeds := make([]*Feed, len(links.Nodes))
 	links.Each(func(i int, s *goquery.Selection) {
-		feedURL, exists := s.Attr("href")
-		if exists {
-			feedURLs = append(feedURLs, feedURL)
+		var feed Feed
+		var err error
+		if rawurl, exists := s.Attr("href"); exists {
+			if feed.URL, err = url.Parse(rawurl); err != nil {
+				return
+			}
+		}
+
+		if title, exists := s.Attr("title"); exists {
+			feed.Title = title
 		}
 	})
 
 	// TODO: Add more find logic
 
-	return
+	return feeds, nil
 }
