@@ -5,7 +5,7 @@ import (
 )
 
 type FeedFinder interface {
-	FindFeeds(ctx context.Context, siteURL string) (feedURLs []*Feed, err error)
+	FindFeeds(ctx context.Context, siteURL string) ([]*Feed, error)
 }
 
 type clientImpl struct{}
