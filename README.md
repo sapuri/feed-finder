@@ -28,11 +28,14 @@ func main() {
 	const siteURL = "https://www3.nhk.or.jp/news/"
 
 	ff := feedfinder.New()
-	feedURLs, err := ff.FindFeeds(ctx, siteURL)
+	feeds, err := ff.FindFeeds(ctx, siteURL)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	fmt.Println(feedURLs)
+	for _, feed := range feeds {
+		fmt.Println(feed.Title)
+		fmt.Println(feed.URL)
+	}
 }
 ```
