@@ -16,7 +16,7 @@ type Feed struct {
 
 type feedFinder struct{}
 
-func newfeedFinder() *feedFinder {
+func newFeedFinder() *feedFinder {
 	return &feedFinder{}
 }
 
