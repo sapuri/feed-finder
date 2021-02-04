@@ -61,7 +61,7 @@ func (ff *feedFinder) FindFeeds(ctx context.Context, siteURL string) ([]*Feed, e
 			feed.Title = title
 		}
 
-		feeds[i] = &feed
+		feeds = append(feeds, &feed)
 	})
 
 	// TODO: Add more find logic
