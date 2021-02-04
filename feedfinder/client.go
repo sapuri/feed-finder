@@ -11,7 +11,7 @@ type FeedFinder interface {
 type clientImpl struct{}
 
 func (c *clientImpl) FindFeeds(ctx context.Context, siteURL string) ([]*Feed, error) {
-	return newfeedFinder().FindFeeds(ctx, siteURL)
+	return newFeedFinder().FindFeeds(ctx, siteURL)
 }
 
 func New() FeedFinder {
