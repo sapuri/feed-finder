@@ -47,7 +47,7 @@ func (ff *feedFinder) FindFeeds(ctx context.Context, siteURL string) ([]*Feed, e
 		return nil, err
 	}
 	links := doc.Find(`link[type="application/rss+xml"]`)
-	feeds := make([]*Feed, len(links.Nodes))
+	feeds := make([]*Feed, 0, len(links.Nodes))
 	links.Each(func(i int, s *goquery.Selection) {
 		var feed Feed
 		var err error
